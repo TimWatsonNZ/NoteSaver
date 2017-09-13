@@ -4,7 +4,7 @@
   "description": "A project to learn Express, React and MongoDb. Aim is to create simple website to store and retrieve tagged notes.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": ".\\node_modules\\.bin\\webpack"
   },
   "repository": {
     "type": "git",
@@ -20,5 +20,20 @@
   "bugs": {
     "url": "https://github.com/TimWatsonNZ/NoteSaver/issues"
   },
-  "homepage": "https://github.com/TimWatsonNZ/NoteSaver#readme"
+  "homepage": "https://github.com/TimWatsonNZ/NoteSaver#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1"
+  },
+  "dependencies": {
+    "axios": "^0.16.2",
+    "express": "^4.15.4",
+    "mongoose": "^4.11.10",
+    "uuid": "^3.1.0",
+    "webpack": "^3.5.5"
+  }
 }
