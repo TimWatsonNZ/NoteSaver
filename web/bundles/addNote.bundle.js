@@ -24187,33 +24187,42 @@ module.exports = function (_React$Component) {
         value: function render() {
             return React.createElement(
                 "div",
-                null,
+                { className: "container" },
                 React.createElement(
-                    "label",
-                    null,
-                    this.state.message
-                ),
-                React.createElement(
-                    "label",
-                    { htmlFor: "Title" },
-                    "Title"
-                ),
-                React.createElement("input", { name: "Title", type: "text",
-                    value: this.state.title, onChange: this.handleTitleChange }),
-                React.createElement(
-                    "label",
-                    { htmlFor: "NoteText" },
-                    "Note"
-                ),
-                React.createElement("textarea", { name: "NoteText", id: "",
-                    cols: "30", rows: "10",
-                    value: this.state.text, onChange: this.handleTextChange }),
-                React.createElement("label", { htmlFor: "Tags" }),
-                React.createElement("textarea", { name: "Tags", id: "", cols: "30", rows: "1" }),
-                React.createElement(
-                    "button",
-                    { onClick: this.saveNote },
-                    "Save"
+                    "div",
+                    { className: "col-md-5" },
+                    React.createElement(
+                        "div",
+                        { className: "form-area" },
+                        React.createElement(
+                            "label",
+                            null,
+                            this.state.message
+                        ),
+                        React.createElement(
+                            "div",
+                            { className: "form-group" },
+                            React.createElement("input", { name: "Title", type: "text", className: "form-control", placeholder: "Title",
+                                value: this.state.title, onChange: this.handleTitleChange })
+                        ),
+                        React.createElement(
+                            "div",
+                            { className: "form-group" },
+                            React.createElement("textarea", { name: "NoteText", id: "", placeholder: "Text", className: "form-control",
+                                cols: "30", rows: "10",
+                                value: this.state.text, onChange: this.handleTextChange })
+                        ),
+                        React.createElement(
+                            "div",
+                            { className: "form-group" },
+                            React.createElement("textarea", { name: "Tags", className: "form-control", cols: "30", rows: "1", placeholder: "Tags" })
+                        ),
+                        React.createElement(
+                            "button",
+                            { className: "btn btn-primar pull-right", onClick: this.saveNote },
+                            "Save"
+                        )
+                    )
                 )
             );
         }

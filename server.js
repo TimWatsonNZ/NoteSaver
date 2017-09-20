@@ -32,6 +32,7 @@ MongoClient.connect(configDB.url, (err, database) => {
 });
 
 app.use("/bundles", express.static(__dirname + "/web/bundles"));
-app.use("/css", express.static(__dirname + "/css"));
+app.use("/css", express.static(__dirname + "/web/css"));
+app.use("/js", express.static(__dirname + "/web/js"));
 
 

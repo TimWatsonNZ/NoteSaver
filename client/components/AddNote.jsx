@@ -57,20 +57,27 @@ module.exports = class AddNote extends React.Component{
 
     render(){
         return(
-            <div>
-                <label >{ this.state.message}</label>
+            <div className="container">
+                <div className="col-md-5">
+                    <div className="form-area">
+                        <label >{ this.state.message}</label>
 
-                <label htmlFor="Title">Title</label>
-                <input name="Title" type="text" 
-                       value={this.state.title} onChange={ this.handleTitleChange }/>
-                <label htmlFor="NoteText">Note</label>
-                <textarea name="NoteText" id="" 
-                          cols="30" rows="10" 
-                          value={this.state.text} onChange={ this.handleTextChange }></textarea>
+                        <div className="form-group">
+                            <input name="Title" type="text" className="form-control" placeholder="Title"
+                                value={this.state.title} onChange={ this.handleTitleChange }/>
+                        </div>
 
-                <label htmlFor="Tags"></label>
-                <textarea name="Tags" id="" cols="30" rows="1"></textarea>
-                <button onClick={this.saveNote}>Save</button>
+                        <div className="form-group">
+                            <textarea name="NoteText" id="" placeholder="Text" className="form-control"
+                                    cols="30" rows="10" 
+                                    value={this.state.text} onChange={ this.handleTextChange }></textarea>
+                        </div>
+                        <div className="form-group">
+                            <textarea name="Tags" className="form-control" cols="30" rows="1" placeholder="Tags"></textarea>
+                        </div>
+                        <button className="btn btn-primar pull-right" onClick={this.saveNote}>Save</button>
+                    </div>
+                </div>
             </div>
         );
     }
