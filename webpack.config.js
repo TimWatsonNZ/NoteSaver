@@ -7,6 +7,7 @@ var CONTAINER_DIR = path.resolve(__dirname, "client/containers");
 var config = {
     entry: {
         addNote: CONTAINER_DIR + "/AddNote.js",
+        updateNote: CONTAINER_DIR + "/UpdateNote.js",
         search: CONTAINER_DIR + "/Search.js"
     },
     output: {

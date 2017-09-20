@@ -5,5 +5,11 @@ module.exports = class Note{
         this.title = title;
         this.text = text;
         this.tags = tags;
+        this.dateCreated = new Date();
+        this.dateModified = new Date();
+    }
+
+    setId(id){
+        this._id = id;
     }
 }

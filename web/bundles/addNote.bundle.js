@@ -10170,17 +10170,32 @@ module.exports = getHostComponentFromComposite;
 "use strict";
 
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 //  Note.js
 
-module.exports = function Note(title, text, tags) {
-    _classCallCheck(this, Note);
+module.exports = function () {
+    function Note(title, text, tags) {
+        _classCallCheck(this, Note);
 
-    this.title = title;
-    this.text = text;
-    this.tags = tags;
-};
+        this.title = title;
+        this.text = text;
+        this.tags = tags;
+        this.dateCreated = new Date();
+        this.dateModified = new Date();
+    }
+
+    _createClass(Note, [{
+        key: "setId",
+        value: function setId(id) {
+            this._id = id;
+        }
+    }]);
+
+    return Note;
+}();
 
 /***/ }),
 /* 86 */
@@ -23095,10 +23110,12 @@ module.exports = function () {
                 throw "Invalid input";
             }
 
-            axios.post("api/notes", note).then(function (response) {
-                return Promise.resolve(response);
-            }).catch(function (error) {
-                return Promise.reject(error);
+            return new Promise(function (resolve, reject) {
+                axios.post("api/notes", note).then(function (response) {
+                    resolve(response);
+                }).catch(function (error) {
+                    reject(error);
+                });
             });
         }
     }, {
@@ -23112,6 +23129,19 @@ module.exports = function () {
                 return Promise.resolve(response.data.notes);
             }).catch(function (error) {
                 return Promise.reject(error);
+            });
+        }
+    }, {
+        key: "getNote",
+        value: function getNote(id) {
+            if (!id) throw "Invalid input";
+
+            return new Promise(function (resolve, reject) {
+                axios.get("/api/notes/" + id).then(function (response) {
+                    resolve(response);
+                }).catch(function (error) {
+                    reject(error);
+                });
             });
         }
     }]);
@@ -24100,7 +24130,7 @@ module.exports = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (AddNote.__proto__ || Object.getPrototypeOf(AddNote)).call(this, props));
 
-        _this.state = { title: "", text: "", tags: [] };
+        _this.state = { id: "", title: "", text: "", tags: [], message: "" };
         _this.noteService = new NoteService();
 
         _this.saveNote = _this.saveNote.bind(_this);
@@ -24112,8 +24142,25 @@ module.exports = function (_React$Component) {
     _createClass(AddNote, [{
         key: "saveNote",
         value: function saveNote() {
+            var _this2 = this;
+
             if (!this.state.title || !this.state.text) return; //  Add validation errors.
-            this.noteService.saveNote(new Note(this.state.title, this.state.text, this.state.tags));
+
+            var note = new Note(this.state.title, this.state.text, this.state.tags);
+            if (this.state.id) {
+                note.setId(this.state.id);
+            }
+
+            this.noteService.saveNote(note).then(function (res, err) {
+                console.log(res);
+                if (err) {
+                    _this2.setState({ message: res.message });
+                } else {
+                    if (res.data.redirect) {
+                        window.location = res.data.redirect;
+                    }
+                }
+            });
         }
     }, {
         key: "handleTitleChange",
@@ -24141,6 +24188,11 @@ module.exports = function (_React$Component) {
             return React.createElement(
                 "div",
                 null,
+                React.createElement(
+                    "label",
+                    null,
+                    this.state.message
+                ),
                 React.createElement(
                     "label",
                     { htmlFor: "Title" },

@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 216);
+/******/ 	return __webpack_require__(__webpack_require__.s = 214);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -24089,9 +24089,7 @@ module.exports = function (_React$Component) {
 /***/ }),
 /* 212 */,
 /* 213 */,
-/* 214 */,
-/* 215 */,
-/* 216 */
+/* 214 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24099,15 +24097,15 @@ module.exports = function (_React$Component) {
 
 var React = __webpack_require__(33);
 var ReactDOM = __webpack_require__(34);
-var SearchNotes = __webpack_require__(217);
+var UpdateNote = __webpack_require__(215);
 var Header = __webpack_require__(211);
 
 ReactDOM.render(React.createElement(Header, null), document.querySelector("#header"));
 
-ReactDOM.render(React.createElement(SearchNotes, null), document.querySelector("#app"));
+ReactDOM.render(React.createElement(UpdateNote, null), document.querySelector("#app"));
 
 /***/ }),
-/* 217 */
+/* 215 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24121,145 +24119,111 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+//  UpdateNote.jsx
 var React = __webpack_require__(33);
 var ReactDOM = __webpack_require__(34);
 var NoteService = __webpack_require__(191);
 var Note = __webpack_require__(85);
-var SearchResult = __webpack_require__(218);
 
 module.exports = function (_React$Component) {
-    _inherits(SearchNotes, _React$Component);
+    _inherits(UpdateNote, _React$Component);
 
-    function SearchNotes(props) {
-        _classCallCheck(this, SearchNotes);
+    function UpdateNote(props) {
+        _classCallCheck(this, UpdateNote);
 
-        var _this = _possibleConstructorReturn(this, (SearchNotes.__proto__ || Object.getPrototypeOf(SearchNotes)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (UpdateNote.__proto__ || Object.getPrototypeOf(UpdateNote)).call(this, props));
 
-        _this.state = { searchTerm: "", searchResults: [] };
+        _this.state = { id: _this.getParameterByName("noteId"), title: "", text: "", tags: [], message: "" };
 
         _this.noteService = new NoteService();
 
-        _this.search = _this.search.bind(_this);
-        _this.searchTermChanged = _this.searchTermChanged.bind(_this);
+        _this.saveNote = _this.saveNote.bind(_this);
+        _this.handleTextChange = _this.handleTextChange.bind(_this);
         return _this;
     }
 
-    _createClass(SearchNotes, [{
-        key: "search",
-        value: function search() {
+    _createClass(UpdateNote, [{
+        key: "handleTextChange",
+        value: function handleTextChange(event) {
+            this.setState({ text: event.target.value });
+        }
+    }, {
+        key: "componentWillMount",
+        value: function componentWillMount() {
             var _this2 = this;
 
-            if (!this.state.searchTerm) return;
-
-            var results = this.noteService.search(this.state.searchTerm).then(function (res, err) {
-                console.log(res);
-                _this2.setState({ searchResults: res });
+            this.noteService.getNote(this.state.id).then(function (result) {
+                var note = result.data.note;
+                _this2.setState({ title: note.title, text: note.text, tags: note.tags });
+            }).catch(function (err) {
+                console.log(err);
             });
         }
     }, {
-        key: "searchTermChanged",
-        value: function searchTermChanged(event) {
-            this.setState({ searchTerm: event.target.value });
+        key: "saveNote",
+        value: function saveNote() {
+            var _this3 = this;
+
+            if (!this.state.title || !this.state.text) return; //  Add validation errors.
+
+            var note = new Note(this.state.title, this.state.text, this.state.tags);
+            if (this.state.id) {
+                note.setId(this.state.id);
+            }
+
+            this.noteService.saveNote(note).catch(function (err) {
+                _this3.setState({ message: res.message });
+            });
         }
     }, {
         key: "render",
         value: function render() {
-            console.log(this.state.searchResults.length);
-            var searchResults = this.state.searchResults.map(function (result) {
-                return React.createElement(SearchResult, { key: result._id,
-                    id: result._id, title: result.title, text: result.text });
-            });
-
             return React.createElement(
                 "div",
                 null,
                 React.createElement(
                     "label",
-                    { htmlFor: "search" },
-                    "Search Term"
-                ),
-                React.createElement("input", { name: "search", type: "text", onChange: this.searchTermChanged }),
-                React.createElement(
-                    "button",
-                    { onClick: this.search },
-                    "Search"
+                    null,
+                    this.state.message
                 ),
                 React.createElement(
                     "label",
-                    { htmlFor: "" },
-                    "Search Results"
+                    { htmlFor: "Title" },
+                    "Title"
                 ),
+                React.createElement("input", { name: "Title", type: "text",
+                    value: this.state.title }),
                 React.createElement(
-                    "div",
-                    null,
-                    searchResults
+                    "label",
+                    { htmlFor: "NoteText" },
+                    "Note"
+                ),
+                React.createElement("textarea", { name: "NoteText", id: "",
+                    cols: "30", rows: "10",
+                    value: this.state.text, onChange: this.handleTextChange }),
+                React.createElement("label", { htmlFor: "Tags" }),
+                React.createElement("textarea", { name: "Tags", id: "", cols: "30", rows: "1" }),
+                React.createElement(
+                    "button",
+                    { onClick: this.saveNote },
+                    "Save"
                 )
             );
         }
-    }]);
-
-    return SearchNotes;
-}(React.Component);
-
-/***/ }),
-/* 218 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-//  SearchResult.jsx
-
-var React = __webpack_require__(33);
-var ReactDOM = __webpack_require__(34);
-
-module.exports = function (_React$Component) {
-    _inherits(SearchResult, _React$Component);
-
-    function SearchResult(props) {
-        _classCallCheck(this, SearchResult);
-
-        return _possibleConstructorReturn(this, (SearchResult.__proto__ || Object.getPrototypeOf(SearchResult)).call(this, props));
-    }
-
-    _createClass(SearchResult, [{
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "div",
-                null,
-                React.createElement("hr", null),
-                React.createElement(
-                    "div",
-                    null,
-                    React.createElement(
-                        "span",
-                        null,
-                        "Title: ",
-                        this.props.title
-                    ),
-                    "\xA0",
-                    React.createElement(
-                        "span",
-                        null,
-                        "Text: ",
-                        this.props.text
-                    )
-                ),
-                React.createElement("hr", null)
-            );
+    }, {
+        key: "getParameterByName",
+        value: function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
         }
     }]);
 
-    return SearchResult;
+    return UpdateNote;
 }(React.Component);
 
 /***/ })

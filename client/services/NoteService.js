@@ -13,13 +13,15 @@ module.exports = class NoteService{
             throw "Invalid input";
         }
 
-        axios.post("api/notes", note)
-             .then( (response) => {
-                return Promise.resolve(response);
-             })
-             .catch( (error) => {
-                return Promise.reject(error);
-             });
+        return new Promise( (resolve, reject) => {
+            axios.post("api/notes", note)
+            .then( (response) => {
+               resolve(response);
+            })
+            .catch( (error) => {
+               reject(error);
+            });
+        });
     }
 
     search(searchTerm){
@@ -33,6 +35,18 @@ module.exports = class NoteService{
         })
         .catch( (error) => {
             return Promise.reject(error);
+        });
+    }
+
+    getNote(id){
+        if(!id) throw "Invalid input";
+
+        return new Promise( (resolve, reject) => {
+            axios.get("/api/notes/" + id).then( (response) => {
+                resolve(response);
+            }).catch( (error) => {
+                reject(error);
+            });
         });
     }
 }

@@ -7,7 +7,7 @@ module.exports = class AddNote extends React.Component{
     constructor(props){
         super(props);
 
-        this.state = { title: "", text: "", tags: []};
+        this.state = { id: "", title: "", text: "", tags: [], message: ""};
         this.noteService = new NoteService();
 
         this.saveNote = this.saveNote.bind(this);
@@ -17,7 +17,25 @@ module.exports = class AddNote extends React.Component{
 
     saveNote(){
         if(!this.state.title || !this.state.text) return;   //  Add validation errors.
-        this.noteService.saveNote(new Note(this.state.title, this.state.text, this.state.tags));
+
+        let note = new Note(this.state.title, this.state.text, this.state.tags);
+        if(this.state.id){
+            note.setId(this.state.id);
+        }
+
+        this.noteService.saveNote(
+            note
+        ).then( (res, err) => {
+            console.log(res);
+            if(err){
+                this.setState({ message: res.message});
+            }else{
+                if(res.data.redirect){
+                    window.location = res.data.redirect;
+                }
+            }
+        });
+
     }
 
     handleTitleChange(event){
@@ -40,6 +58,8 @@ module.exports = class AddNote extends React.Component{
     render(){
         return(
             <div>
+                <label >{ this.state.message}</label>
+
                 <label htmlFor="Title">Title</label>
                 <input name="Title" type="text" 
                        value={this.state.title} onChange={ this.handleTitleChange }/>
