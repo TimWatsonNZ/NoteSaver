@@ -21,12 +21,13 @@ module.exports = function setupRoutes(app, db){
 
         if(body._id){
             console.log("Updating Note...");
+            console.log(body.text);
             db.collection("notes")
-                .update(body, 
+                .update({"_id": ObjectId(body._id)}, {$set: { "text": body.text}}, 
                     (err, result) => {
                         if(err) console.log(err);
         
-                        console.log("Save successful.")
+                        console.log("Save successful.");
                         res.send({ id: result._id, message: "Save successful" });
                     }
             );
