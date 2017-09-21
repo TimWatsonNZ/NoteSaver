@@ -8,7 +8,8 @@ var config = {
     entry: {
         addNote: CONTAINER_DIR + "/AddNote.js",
         updateNote: CONTAINER_DIR + "/UpdateNote.js",
-        search: CONTAINER_DIR + "/Search.js"
+        search: CONTAINER_DIR + "/Search.js",
+        login: CONTAINER_DIR + "/Login.js"
     },
     output: {
         path: BUILD_DIR,

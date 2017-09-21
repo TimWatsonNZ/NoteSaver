@@ -3,20 +3,24 @@
 const path = require("path");
 const ObjectId = require("mongodb").ObjectID;
 
-module.exports = function setupRoutes(app, db){
+module.exports = (app, db, passport) => {
     app.get("/", (req, res) => {
+        res.sendFile(path.join(__dirname + "/web/login.html"));
+    });
+    
+    app.get("/search", isLoggedIn, (req, res) => {
         res.sendFile(path.join(__dirname + "/web/search.html"));
     });
     
-    app.get("/addNote", (req, res) => {
+    app.get("/addNote", isLoggedIn, (req, res) => {
         res.sendFile(path.join(__dirname + "/web/addNote.html"));
     });
 
-    app.get("/updateNote", (req, res) => {
+    app.get("/updateNote", isLoggedIn, (req, res) => {
         res.sendFile(path.join(__dirname + "/web/updateNote.html"));
-    })
-    
-    app.post("/api/notes", (req, res) => {
+    });
+
+    app.post("/api/notes", isLoggedIn, (req, res) => {
         let body = req.body;
 
         if(body._id){
@@ -51,7 +55,7 @@ module.exports = function setupRoutes(app, db){
         
     });
 
-    app.get("/api/notes/:id", (req, res) => {
+    app.get("/api/notes/:id", isLoggedIn, (req, res) => {
         console.log(req.params.id);
         let cursor = db.collection("notes").find(
             {
@@ -75,7 +79,7 @@ module.exports = function setupRoutes(app, db){
         });
     });
     
-    app.get("/api/notes", (req, res) => {
+    app.get("/api/notes", isLoggedIn, (req, res) => {
         const query = req.query;
     
         let findString = ".*var.*";
@@ -103,4 +107,12 @@ module.exports = function setupRoutes(app, db){
             res.send({notes: distinctResults});
         });
     });
+}
+
+function isLoggedIn(req, res, next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+
+    res.redirect("/");
 }
