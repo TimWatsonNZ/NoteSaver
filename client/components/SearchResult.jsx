@@ -13,8 +13,8 @@ module.exports = class SearchResult extends React.Component{
             <div>
                 <hr />
                 <div>
-                    <span>Title: {this.props.title}</span>&nbsp;
-                    <span>Text: {this.props.text}</span>
+                    <div>{this.props.title}</div>&nbsp;
+                    <div>{this.props.text}</div>
                 </div>
                 <hr />
             </div>

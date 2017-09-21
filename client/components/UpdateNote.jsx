@@ -3,6 +3,7 @@ let React = require("react");
 let ReactDOM = require("react-dom");
 let NoteService = require("../services/NoteService.js");
 let Note = require("../../models/Note.js");
+let EditableNote = require("./EditableNote.jsx");
 
 module.exports = class UpdateNote extends React.Component{
     constructor(props){
@@ -13,12 +14,10 @@ module.exports = class UpdateNote extends React.Component{
 
         this.saveNote = this.saveNote.bind(this);
         this.handleTextChange = this.handleTextChange.bind(this);
+        this.handleTitleChange = this.handleTitleChange.bind(this);
+        this.handleTagChange = this.handleTagChange.bind(this);
     }
     
-    handleTextChange(event){
-        this.setState({ text: event.target.value});
-    }
-
     componentWillMount(){
         this.noteService.getNote(this.state.id)
             .then( (result) => {
@@ -28,6 +27,23 @@ module.exports = class UpdateNote extends React.Component{
             .catch( (err) => {
                 console.log(err);
             });   
+    }
+    
+    handleTitleChange(event){
+        this.setState({ title: event.target.value });
+    }
+
+    handleTextChange(event){
+        this.setState({ text: event.target.value});
+    }
+
+    handleTagChange(event){
+        let tagText = event.target.value;
+
+        tagText = tagText.replace(/\s*/, ",");
+        tagText = tagText.replace(/,+/, ",");
+
+        this.setState({ tags: tagText.split(",")});
     }
     
     saveNote(){
@@ -50,17 +66,12 @@ module.exports = class UpdateNote extends React.Component{
         <div>
             <label >{ this.state.message}</label>
 
-            <label htmlFor="Title">Title</label>
-            <input name="Title" type="text" 
-                    value={this.state.title}/>
-            <label htmlFor="NoteText">Note</label>
-            <textarea name="NoteText" id="" 
-                        cols="30" rows="10" 
-                        value={this.state.text} onChange={ this.handleTextChange }></textarea>
+            <EditableNote title={this.state.title} text={this.state.text} tags={this.state.tags}
+                          handleTitleChange={this.handleTitleChange}
+                          handleTextChange={this.handleTextChange}
+                          handleTagChange={this.handleTagChange} />
 
-            <label htmlFor="Tags"></label>
-            <textarea name="Tags" id="" cols="30" rows="1"></textarea>
-            <button onClick={this.saveNote}>Save</button>
+            <button className="btn btn-primary pull-right" onClick={this.saveNote}>Save</button>
         </div>
         )
     }
