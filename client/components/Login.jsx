@@ -16,7 +16,7 @@ module.exports = class Login extends React.Component{
                         <span className="fa fa-sign-in"></span>Login
                     </h1>
 
-                    <form action="/api/login">
+                    <form action="/api/login" method="post">
                         <div className="">
                             <label htmlFor="">Email</label>
                             <input type="text"  className="form-control" name="email" />

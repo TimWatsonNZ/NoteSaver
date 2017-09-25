@@ -6,12 +6,6 @@ const ReactDOM = require("react-dom");
 module.exports = class Header extends React.Component {
     constructor(props){
         super(props);
-
-        this.logout = this.logout.bind(this);
-    }
-
-    logout(){
-        
     }
 
     render(){
@@ -24,7 +18,7 @@ module.exports = class Header extends React.Component {
                     <ul className="nav navbar-nav">
                         <li><a href="/addNote">Add Note</a></li>
                         <li><a href="/">Search Notes</a></li>
-                        <li><a href="/" onClick={this.logout}>Logout</a></li>
+                        <li><a href="/api/logout" onClick={this.logout}>Logout</a></li>
                     </ul>
                 </div>
             </div>

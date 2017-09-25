@@ -107,6 +107,17 @@ module.exports = (app, db, passport) => {
             res.send({notes: distinctResults});
         });
     });
+
+    app.get("/api/logout", (req, res) => {
+        req.logout();
+        res.redirect("/");
+    });
+
+    app.post("/api/login", passport.authenticate("local-login", {
+        successRedirect: "/search",
+        failureRedirect: "/",
+        failureFlash: true
+    }));
 }
 
 function isLoggedIn(req, res, next){
